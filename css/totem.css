@@ -652,31 +652,17 @@ ul, li{
 
 /* Catalogue tiles (catalogues.html) reuse the product-tile card shell above,
    but hold a flat SVG glyph instead of a cropped product photo — override
-   the shared cover-fit so the icon sits centred with breathing room. The
-   shared grid otherwise stretches every row to fill the available height
-   (fine with 6-9 product tiles, but with only 2 catalogue tiles that meant
-   each one ballooned to the full page height), so .catalogue_grid caps the
-   tiles to a sane size and centres them instead of stretching. */
+   the shared grid otherwise stretches every row to fill the available
+   height (fine with 6-9 product tiles, but with only 2 catalogue tiles
+   that meant each one ballooned to the full page height), so
+   .catalogue_grid caps the tiles to a sane size and centres them instead
+   of stretching. Now that both catalogue tiles carry a real cover photo,
+   they reuse the same cover-fit image treatment as every other tile. */
 #page_solutions_stockage.catalogue_grid{
 	grid-template-columns:repeat(2, minmax(160px, 260px));
 	grid-auto-rows:minmax(220px, 340px);
 	align-content:center;
 	justify-content:center;
-	}
-
-#icone_solutions_agencement > a.catalogue_link{
-	display:flex;
-	align-items:center;
-	justify-content:center;
-	background:var(--color-bg);
-	padding:clamp(14px, 3dvh, 28px);
-	}
-
-#icone_solutions_agencement img.catalogue_icon{
-	width:auto;
-	height:100%;
-	max-width:70%;
-	object-fit:contain;
 	}
 
 #titre_icone_stockage, #titre_icone_agencement{
@@ -789,3 +775,26 @@ p{
 	}
 
 /* FIN PAGE FICHE TECHNIQUES ==================================================== */
+
+/* PAGE CATALOGUE VIEWER ======================================================== */
+
+/* Catalogues used to be a link to the PDF with target="_blank", which spawns
+   a second tab the kiosk browser has no clean way back out of. Viewing the
+   PDF in an iframe on our own page keeps the visitor inside the site, with
+   the same header/back button as everywhere else. */
+#page_catalogue_viewer{
+	flex:1 1 auto;
+	min-height:0;
+	width:100%;
+	display:flex;
+	}
+
+#catalogue_viewer_frame{
+	flex:1 1 auto;
+	width:100%;
+	height:100%;
+	border:0;
+	background:var(--color-bg);
+	}
+
+/* FIN PAGE CATALOGUE VIEWER ===================================================== */
