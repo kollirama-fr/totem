@@ -1,0 +1,147 @@
+/* Portrait kiosk gallery. #header (from totem.css) stays pinned; this file
+   only styles what sits inside #contenu below it. Photo count varies a lot
+   per category so, unlike the rest of the site, the thumbnail grid scrolls
+   internally rather than forcing everything into one screen. */
+
+* {
+  box-sizing: border-box;
+}
+
+h2.galerie{
+	color:var(--color-text, #17171a);
+	font-size:clamp(20px, 3dvh, 30px);
+	font-weight:800;
+	letter-spacing:-.01em;
+	}
+
+p.galerie{
+	font-size:clamp(12px, 1.8dvh, 16px);
+	font-weight:700;
+	letter-spacing:.08em;
+	text-transform:uppercase;
+	color:#fff;
+	background:var(--color-primary, oklch(23.503% 0.00003 271.152));
+	display:inline-block;
+	padding:.5em 1.1em;
+	border-radius:999px;
+	margin-top:.6em;
+	}
+
+#titre_galerie {
+	flex:0 0 auto;
+	width:100%;
+	text-align:center;
+	padding:clamp(14px, 2.4dvh, 28px) 12px clamp(10px, 1.8dvh, 20px) 12px;
+}
+
+/* The grid.
+   Row height is a calc() tied to the container's own inline size via
+   container query units, not "auto" — Chromium's grid track-sizing pass
+   doesn't resolve auto row tracks correctly against items whose height only
+   comes from aspect-ratio (a circular column-width -> item-height ->
+   row-height dependency), so rows either collapsed to a sliver or, once the
+   ratio lived on the grid item instead, the item outgrew its track and
+   overlapped the row below. Giving grid-auto-rows an explicit px value
+   sidesteps that resolution entirely: 2 columns with 1 gap between them. */
+.row{
+	container-type: inline-size;
+	flex:1 1 auto;
+	min-height:0;
+	overflow-y:auto;
+	display:grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-auto-rows: calc((100cqw - 10px) / 2 * 3 / 4);
+	align-content:start;
+	gap:10px;
+	padding:0 12px 24px 12px;
+}
+
+.column {
+  padding: 0;
+  border-radius:0;
+  overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,.06), 0 1px 1px rgba(0,0,0,.04);
+}
+
+.column img {
+  opacity: 1;
+  cursor: pointer;
+  border:0;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .3s cubic-bezier(.22,1,.36,1);
+}
+
+.column img:hover, .column img:active {
+  transform:scale(1.05);
+}
+
+/* The expanding image container.
+   Note: the inline onclick handlers toggle style.display between "none" and
+   "block" directly, which would override a flex value here — so centering
+   is done on the image itself via absolute positioning instead. */
+.container {
+  position: fixed;
+  inset:0;
+  display:none;
+  background: rgba(10,10,12,.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index:100;
+}
+
+.container img#expandedImg{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  max-width:calc(100% - 48px);
+  max-height:88dvh;
+  width:auto !important;
+  border-radius:0;
+  box-shadow:0 24px 60px rgba(0,0,0,.4);
+}
+
+/* Expanding image text */
+#imgtext {
+  position: absolute;
+  bottom: 28px;
+  left: 0;
+  right: 0;
+  text-align:center;
+  color: white;
+  font-size: 16px;
+  font-weight:600;
+  letter-spacing:.02em;
+}
+
+/* Closable button inside the expanded image.
+   An inline SVG replaces the old &times; glyph: text-character close icons
+   never sit optically centred in their box across fonts/platforms, no
+   matter how the box itself is centred. */
+.closebtn {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  color: white;
+  cursor: pointer;
+  width:44px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+  transition:background-color .2s ease;
+}
+
+.closebtn svg {
+  width:20px;
+  height:20px;
+}
+
+.closebtn:hover, .closebtn:active{
+  background:rgba(255,255,255,.24);
+}
